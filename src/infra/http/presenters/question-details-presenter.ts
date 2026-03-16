@@ -1,6 +1,7 @@
 import { QuestionDetails } from '@/domain/forum/enterprise/entities/value-objects/question-details'
 import { AttachmentPresenter } from './attachment-presenter'
 
+// TODO
 export class QuestionDetailsPresenter {
   static toHTTP(questionDetails: QuestionDetails) {
    console.log('questionDetails: ', JSON.parse(JSON.stringify(questionDetails)).props.questionId.value)
