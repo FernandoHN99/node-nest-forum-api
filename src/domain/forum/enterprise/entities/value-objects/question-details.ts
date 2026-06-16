@@ -34,7 +34,6 @@ export class QuestionDetails extends ValueObject<QuestionDetailsProps> {
   }
 
   get content() {
-   console.log('oi: ', this.props)
     return this.props.content
   }
 

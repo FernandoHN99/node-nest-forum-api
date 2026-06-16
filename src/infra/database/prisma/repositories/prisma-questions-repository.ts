@@ -47,12 +47,19 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
   }
 
   async findDetailsBySlug(slug: string): Promise<QuestionDetails | null> {
-    const cacheHit = await this.cache.get(`question:${slug}:details`)
+    const cacheKey = `question:${slug}:details`
+    const cacheHit = await this.cache.get(cacheKey)
 
     if (cacheHit) {
       const cacheData = JSON.parse(cacheHit)
+      const cachedQuestionDetails =
+        PrismaQuestionDetailsMapper.toDomainFromCache(cacheData)
 
-      return cacheData
+      if (cachedQuestionDetails) {
+        return cachedQuestionDetails
+      }
+
+      await this.cache.delete(cacheKey)
     }
 
     const question = await this.prisma.question.findUnique({
@@ -71,10 +78,7 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
 
     const questionDetails = PrismaQuestionDetailsMapper.toDomain(question)
 
-    await this.cache.set(
-      `question:${slug}:details`,
-      JSON.stringify(questionDetails),
-    )
+    await this.cache.set(cacheKey, JSON.stringify(questionDetails))
 
     return questionDetails
   }

@@ -5,6 +5,7 @@ import { CacheModule } from '@/infra/cache/cache.module'
 import { DatabaseModule } from '@/infra/database/database.module'
 import { INestApplication } from '@nestjs/common'
 import { Test } from '@nestjs/testing'
+import { QuestionDetails } from '@/domain/forum/enterprise/entities/value-objects/question-details'
 import { AttachmentFactory } from 'test/factories/make-attachment'
 import { QuestionFactory } from 'test/factories/make-question'
 import { QuestionAttachmentFactory } from 'test/factories/make-question-attachments'
@@ -80,15 +81,27 @@ describe('Prisma Questions Repository (E2E)', () => {
     })
 
     const slug = question.slug.value
+    const cachedQuestionDetails = QuestionDetails.create({
+      questionId: question.id,
+      authorId: user.id,
+      author: 'Cached author',
+      title: 'Cached question title',
+      content: 'Cached question content',
+      slug: question.slug,
+      bestAnswerId: null,
+      attachments: [attachment],
+      createdAt: new Date('2024-01-01T00:00:00.000Z'),
+      updatedAt: null,
+    })
 
     await cacheRepository.set(
       `question:${slug}:details`,
-      JSON.stringify({ empty: true }),
+      JSON.stringify(cachedQuestionDetails),
     )
 
     const questionDetails = await questionsRepository.findDetailsBySlug(slug)
 
-    expect(questionDetails).toEqual({ empty: true })
+    expect(questionDetails).toEqual(cachedQuestionDetails)
   })
 
   it('should reset question details cache when saving the question', async () => {
