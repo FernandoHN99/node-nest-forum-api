@@ -66,4 +66,31 @@ describe('Create question (E2E)', () => {
 
     expect(attachmentsOnDatabase).toHaveLength(2)
   })
+
+  test('[POST] /questions with duplicated slug', async () => {
+    const user = await studentFactory.makePrismaStudent()
+
+    const accessToken = jwt.sign({ sub: user.id.toString() })
+
+    const questionData = {
+      title: 'Duplicated question',
+      content: 'Question content',
+      attachments: [],
+    }
+
+    await request(app.getHttpServer())
+      .post('/questions')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send(questionData)
+
+    const response = await request(app.getHttpServer())
+      .post('/questions')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send(questionData)
+
+    expect(response.statusCode).toBe(409)
+    expect(response.body.message).toEqual(
+      'Question with slug "duplicated-question" already exists.',
+    )
+  })
 })

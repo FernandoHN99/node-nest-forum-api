@@ -4,6 +4,7 @@ import { InMemoryQuestionsRepository } from 'test/repositories/in-memory-questio
 import { InMemoryQuestionAttachmentsRepository } from 'test/repositories/in-memory-question-attachments-repository'
 import { InMemoryStudentsRepository } from 'test/repositories/in-memory-students-repository'
 import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository'
+import { QuestionAlreadyExistsError } from './errors/question-already-exists-error'
 
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository
 let inMemoryQuestionAttachmentsRepository: InMemoryQuestionAttachmentsRepository
@@ -34,7 +35,12 @@ describe('Create Question', () => {
     })
 
     expect(result.isRight()).toBe(true)
-    expect(inMemoryQuestionsRepository.items[0]).toEqual(result.value?.question)
+
+    if (!result.isRight()) {
+      throw new Error('Question creation failed')
+    }
+
+    expect(inMemoryQuestionsRepository.items[0]).toEqual(result.value.question)
     expect(
       inMemoryQuestionsRepository.items[0].attachments.currentItems,
     ).toHaveLength(2)
@@ -66,5 +72,25 @@ describe('Create Question', () => {
         }),
       ]),
     )
+  })
+
+  it('should not be able to create a question with same slug', async () => {
+    await sut.execute({
+      authorId: '1',
+      title: 'Nova pergunta',
+      content: 'Conteúdo da pergunta',
+      attachmentsIds: [],
+    })
+
+    const result = await sut.execute({
+      authorId: '1',
+      title: 'Nova pergunta',
+      content: 'Conteúdo da pergunta',
+      attachmentsIds: [],
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(QuestionAlreadyExistsError)
+    expect(inMemoryQuestionsRepository.items).toHaveLength(1)
   })
 })
