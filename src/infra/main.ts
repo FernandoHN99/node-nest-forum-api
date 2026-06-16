@@ -32,6 +32,7 @@ async function bootstrap() {
     .addTag('Comments', 'Question and answer comment endpoints.')
     .addTag('Uploads', 'Attachment upload endpoints.')
     .addTag('Notifications', 'Notification endpoints.')
+    .addTag('Health', 'Service health and liveness endpoints.')
     .build()
 
   const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig)

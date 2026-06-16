@@ -3,6 +3,8 @@ import { ConfigModule } from '@nestjs/config'
 import { envSchema } from './env/env'
 import { AuthModule } from './auth/auth.module'
 import { HttpModule } from './http/http.module'
+import { HomeModule } from './http/home/home.module'
+import { HealthModule } from './http/health/health.module'
 import { EnvModule } from './env/env.module'
 import { EventsModule } from './events/events.module'
 
@@ -14,6 +16,8 @@ import { EventsModule } from './events/events.module'
     }),
     AuthModule,
     HttpModule,
+    HomeModule,
+    HealthModule,
     EnvModule,
     EventsModule,
   ],
