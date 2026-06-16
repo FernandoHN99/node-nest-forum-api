@@ -8,12 +8,14 @@ import {
 import { ReadNotificationUseCase } from '@/domain/notification/application/use-cases/read-notification'
 import { CurrentUser } from '@/infra/auth/current-user-decorator'
 import { UserPayload } from '@/infra/auth/jwt.strategy'
+import { ApiReadNotificationDocs } from '../docs/openapi'
 
 @Controller('/notifications/:notificationId/read')
 export class ReadNotificationController {
   constructor(private readNotification: ReadNotificationUseCase) {}
 
   @Patch()
+  @ApiReadNotificationDocs()
   @HttpCode(204)
   async handle(
     @CurrentUser() user: UserPayload,

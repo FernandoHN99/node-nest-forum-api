@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core'
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { AppModule } from './app.module'
 import { EnvService } from './env/env.service'
 
@@ -9,6 +10,36 @@ async function bootstrap() {
 
   const configService = app.get(EnvService)
   const port = configService.get('PORT')
+
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle('Forum Q&A API')
+    .setDescription('HTTP API for a questions and answers forum.')
+    .setVersion('1.0.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        description: 'JWT access token returned by POST /sessions.',
+      },
+      'bearer',
+    )
+    .addTag('Auth', 'Authentication endpoints.')
+    .addTag('Users', 'User account endpoints.')
+    .addTag('Questions', 'Question endpoints.')
+    .addTag('Answers', 'Answer endpoints.')
+    .addTag('Comments', 'Question and answer comment endpoints.')
+    .addTag('Uploads', 'Attachment upload endpoints.')
+    .addTag('Notifications', 'Notification endpoints.')
+    .build()
+
+  const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig)
+
+  SwaggerModule.setup('docs', app, swaggerDocument, {
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  })
 
   await app.listen(port)
 }

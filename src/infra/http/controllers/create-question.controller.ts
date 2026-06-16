@@ -11,6 +11,7 @@ import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 import { z } from 'zod'
 import { CreateQuestionUseCase } from '@/domain/forum/application/use-cases/create-question'
 import { QuestionAlreadyExistsError } from '@/domain/forum/application/use-cases/errors/question-already-exists-error'
+import { ApiCreateQuestionDocs } from '../docs/openapi'
 
 const createQuestionBodySchema = z.object({
   title: z.string(),
@@ -27,6 +28,7 @@ export class CreateQuestionController {
   constructor(private createQuestion: CreateQuestionUseCase) {}
 
   @Post()
+  @ApiCreateQuestionDocs()
   async handle(
     @Body(bodyValidationPipe) body: CreateQuestionBodySchema,
     @CurrentUser() user: UserPayload,

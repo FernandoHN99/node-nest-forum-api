@@ -11,6 +11,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
+import { ApiUploadAttachmentDocs } from '../docs/openapi'
 
 @Controller('/attachments')
 export class UploadAttachmentController {
@@ -19,6 +20,7 @@ export class UploadAttachmentController {
   ) {}
 
   @Post()
+  @ApiUploadAttachmentDocs()
   @UseInterceptors(FileInterceptor('file'))
   async handle(
     @UploadedFile(

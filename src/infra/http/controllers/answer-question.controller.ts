@@ -10,6 +10,7 @@ import { UserPayload } from '@/infra/auth/jwt.strategy'
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 import { z } from 'zod'
 import { AnswerQuestionUseCase } from '@/domain/forum/application/use-cases/answer-question'
+import { ApiAnswerQuestionDocs } from '../docs/openapi'
 
 const answerQuestionBodySchema = z.object({
   content: z.string(),
@@ -25,6 +26,7 @@ export class AnswerQuestionController {
   constructor(private answerQuestion: AnswerQuestionUseCase) {}
 
   @Post()
+  @ApiAnswerQuestionDocs()
   async handle(
     @Body(bodyValidationPipe) body: AnswerQuestionBodySchema,
     @CurrentUser() user: UserPayload,

@@ -10,6 +10,7 @@ import { UserPayload } from '@/infra/auth/jwt.strategy'
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 import { z } from 'zod'
 import { CommentOnAnswerUseCase } from '@/domain/forum/application/use-cases/comment-on-answer'
+import { ApiCommentOnAnswerDocs } from '../docs/openapi'
 
 const commentOnAnswerBodySchema = z.object({
   content: z.string(),
@@ -24,6 +25,7 @@ export class CommentOnAnswerController {
   constructor(private commentOnAnswer: CommentOnAnswerUseCase) {}
 
   @Post()
+  @ApiCommentOnAnswerDocs()
   async handle(
     @Body(bodyValidationPipe) body: CommentOnAnswerBodySchema,
     @CurrentUser() user: UserPayload,

@@ -9,6 +9,7 @@ import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 import { z } from 'zod'
 import { FetchAnswerCommentsUseCase } from '@/domain/forum/application/use-cases/fetch-answer-comments'
 import { CommentWithAuthorPresenter } from '../presenters/comment-with-author-presenter'
+import { ApiFetchAnswerCommentsDocs } from '../docs/openapi'
 
 const pageQueryParamSchema = z
   .string()
@@ -26,6 +27,7 @@ export class FetchAnswerCommentsController {
   constructor(private fetchAnswerComments: FetchAnswerCommentsUseCase) {}
 
   @Get()
+  @ApiFetchAnswerCommentsDocs()
   async handle(
     @Query('page', queryValidationPipe) page: PageQueryParamSchema,
     @Param('answerId') answerId: string,

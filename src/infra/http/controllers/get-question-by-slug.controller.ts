@@ -1,12 +1,14 @@
 import { BadRequestException, Controller, Get, Param } from '@nestjs/common'
 import { GetQuestionBySlugUseCase } from '@/domain/forum/application/use-cases/get-question-by-slug'
 import { QuestionDetailsPresenter } from '../presenters/question-details-presenter'
+import { ApiGetQuestionBySlugDocs } from '../docs/openapi'
 
 @Controller('/questions/:slug')
 export class GetQuestionBySlugController {
   constructor(private getQuestionBySlug: GetQuestionBySlugUseCase) {}
 
   @Get()
+  @ApiGetQuestionBySlugDocs()
   async handle(@Param('slug') slug: string) {
     const result = await this.getQuestionBySlug.execute({
       slug,

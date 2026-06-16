@@ -5,7 +5,7 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
-   "engines": {
+  "engines": {
     "node": "=22.20.0"
   },
   "scripts": {
@@ -31,6 +31,7 @@
     "@nestjs/jwt": "10.1.0",
     "@nestjs/passport": "10.0.1",
     "@nestjs/platform-express": "10.0.0",
+    "@nestjs/swagger": "7.4.2",
     "@prisma/client": "5.2.0",
     "bcryptjs": "2.4.3",
     "dayjs": "1.11.9",

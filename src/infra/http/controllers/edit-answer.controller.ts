@@ -11,6 +11,7 @@ import { UserPayload } from '@/infra/auth/jwt.strategy'
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 import { z } from 'zod'
 import { EditAnswerUseCase } from '@/domain/forum/application/use-cases/edit-answer'
+import { ApiEditAnswerDocs } from '../docs/openapi'
 
 const editAnswerBodySchema = z.object({
   content: z.string(),
@@ -26,6 +27,7 @@ export class EditAnswerController {
   constructor(private editAnswer: EditAnswerUseCase) {}
 
   @Put()
+  @ApiEditAnswerDocs()
   @HttpCode(204)
   async handle(
     @Body(bodyValidationPipe) body: EditAnswerBodySchema,

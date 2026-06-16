@@ -9,6 +9,7 @@ import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 import { z } from 'zod'
 import { FetchQuestionAnswersUseCase } from '@/domain/forum/application/use-cases/fetch-question-answers'
 import { AnswerPresenter } from '../presenters/answer-presenter'
+import { ApiFetchQuestionAnswersDocs } from '../docs/openapi'
 
 const pageQueryParamSchema = z
   .string()
@@ -26,6 +27,7 @@ export class FetchQuestionAnswersController {
   constructor(private fetchQuestionAnswers: FetchQuestionAnswersUseCase) {}
 
   @Get()
+  @ApiFetchQuestionAnswersDocs()
   async handle(
     @Query('page', queryValidationPipe) page: PageQueryParamSchema,
     @Param('questionId') questionId: string,

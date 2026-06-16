@@ -8,6 +8,7 @@ import {
 import { CurrentUser } from '@/infra/auth/current-user-decorator'
 import { UserPayload } from '@/infra/auth/jwt.strategy'
 import { ChooseQuestionBestAnswerUseCase } from '@/domain/forum/application/use-cases/choose-question-best-answer'
+import { ApiChooseQuestionBestAnswerDocs } from '../docs/openapi'
 
 @Controller('/answers/:answerId/choose-as-best')
 export class ChooseQuestionBestAnswerController {
@@ -16,6 +17,7 @@ export class ChooseQuestionBestAnswerController {
   ) {}
 
   @Patch()
+  @ApiChooseQuestionBestAnswerDocs()
   @HttpCode(204)
   async handle(
     @CurrentUser() user: UserPayload,
