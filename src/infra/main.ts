@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
+import { apiReference } from '@scalar/nestjs-api-reference'
 import { AppModule } from './app.module'
 import { EnvService } from './env/env.service'
 
@@ -35,11 +36,18 @@ async function bootstrap() {
 
   const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig)
 
-  SwaggerModule.setup('docs', app, swaggerDocument, {
+  SwaggerModule.setup('swagger', app, swaggerDocument, {
     swaggerOptions: {
       persistAuthorization: true,
     },
   })
+
+  app.use(
+    '/docs',
+    apiReference({
+      content: swaggerDocument,
+    }),
+  )
 
   await app.listen(port)
 }
